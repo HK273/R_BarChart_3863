@@ -1,4 +1,4 @@
-#Install releveant packages
+#Install relevant packages
 install.packages("ggplot")
 install.packages("readxl")
 library(ggplot2)
