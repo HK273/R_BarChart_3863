@@ -1,0 +1,78 @@
+---
+title: 'Report 3863: Bar Chart Visualisation'
+author: "Hector Kurtyanek"
+date: "11/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Code Summary
+
+This code produces a simple stacked bar chart visualisation
+
+## Report Background
+
+This report is based around a quality improvement project, reviewing the impact of ‘Family Meetings’ on the ward as first point of contact. More specifically, looking at the use of family intervention appointments to improve inpatient outcomes. The aim is to measure this via the patients CORE10 and DIALOG+ assessments taken post admission and post discharge.  Some qualitative data will also be captured in the form of feedback questionnaires and surveys given to patients, carers and family members 
+
+## Remove objects if necessary
+
+```{r}
+rm(list = ls())
+```
+
+### Install Packages
+
+You will need to install the below packages to create the output
+
+```{r install pacakges}
+#install.packages("ggplot")
+#install.packages("readxl")
+```
+
+## Make packages available
+
+```{r llibrary}
+library(ggplot2)
+library(readxl)
+```
+
+
+## Read data into RStudio
+```{r read data}
+FamIntR <- read_excel("G:\Reports\1. Adhocs\Adhoc Requests Completed\3863 - Family Intervention Appts\R - 3863\FamIntRNew.xlsx")
+View(FamIntR)
+```
+
+
+## Create and view data frame
+
+```{r data frame}
+df <- data.frame(FamIntR)
+str(df)
+```
+
+
+## Create stacked view of data and add colour scheme
+
+```{r plot}
+df_base <- ggplot(data = df, aes(x =Ward, y=OutcomePercentage,
+                                fill=Outcome)) +scale_fill_brewer(palette="Set1") #Colour scheme
+
+df_base + geom_bar(stat = "identity") 
+
+
+df_base +
+  geom_bar(stat = "identity", #confusing subject, when plotting pivoted data, always leave "identity"
+           width = 0.6,      # how wide (0-1) the bars are
+           alpha = 0.7) +    # the opaqueness of the fill colours
+  theme_grey()+  # the background          
+  
+  theme(legend.position = "right") +  # legend position
+  labs(x= "Ward", y = "Percentage", title = "Form recording and 'Family Intervention' appointments",
+       fill = "Category")  # axis labels and footnote
+```
+
